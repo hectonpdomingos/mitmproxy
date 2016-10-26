@@ -951,13 +951,13 @@ class TestUpstreamProxySSL(
         assert req.status_code == 418
 
         # CONNECT from pathoc to chain[0],
-        assert self.proxy.tmaster.state.flow_count() == 2
+        assert len(self.proxy.tmaster.state.flows) == 2
         # request from pathoc to chain[0]
         # CONNECT from proxy to chain[1],
-        assert self.chain[0].tmaster.state.flow_count() == 2
+        assert len(self.chain[0].tmaster.state.flows) == 2
         # request from proxy to chain[1]
         # request from chain[0] (regular proxy doesn't store CONNECTs)
-        assert self.chain[1].tmaster.state.flow_count() == 1
+        assert len(self.chain[1].tmaster.state.flows) == 1
 
 
 class RequestKiller:
@@ -999,12 +999,12 @@ class TestProxyChainingSSLReconnect(tservers.HTTPUpstreamProxyTest):
             assert req.content == b"content"
             assert req.status_code == 418
 
-            assert self.proxy.tmaster.state.flow_count() == 2  # CONNECT and request
+            assert len(self.proxy.tmaster.state.flows) == 2  # CONNECT and request
             # CONNECT, failing request,
-            assert self.chain[0].tmaster.state.flow_count() == 4
+            assert len(self.chain[0].tmaster.state.flows) == 4
             # reCONNECT, request
             # failing request, request
-            assert self.chain[1].tmaster.state.flow_count() == 2
+            assert len(self.chain[1].tmaster.state.flows) == 2
             # (doesn't store (repeated) CONNECTs from chain[0]
             #  as it is a regular proxy)
 
@@ -1031,12 +1031,12 @@ class TestProxyChainingSSLReconnect(tservers.HTTPUpstreamProxyTest):
             req = p.request("get:'/p/418:b\"content2\"'")
 
             assert req.status_code == 502
-            assert self.proxy.tmaster.state.flow_count() == 3  # + new request
+            assert len(self.proxy.tmaster.state.flows) == 3  # + new request
             # + new request, repeated CONNECT from chain[1]
-            assert self.chain[0].tmaster.state.flow_count() == 6
+            assert len(self.chain[0].tmaster.state.flows) == 6
             # (both terminated)
             # nothing happened here
-            assert self.chain[1].tmaster.state.flow_count() == 2
+            assert len(self.chain[1].tmaster.state.flows) == 2
 
 
 class AddUpstreamCertsToClientChainMixin:

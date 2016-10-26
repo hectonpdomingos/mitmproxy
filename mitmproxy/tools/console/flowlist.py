@@ -347,7 +347,7 @@ class FlowListBox(urwid.ListBox):
             self.master.state.set_focus(0)
             signals.flowlist_change.send(self)
         elif key == "G":
-            self.master.state.set_focus(self.master.state.flow_count())
+            self.master.state.set_focus(len(self.master.state.flows))
             signals.flowlist_change.send(self)
         elif key == "f":
             signals.status_prompt.send(

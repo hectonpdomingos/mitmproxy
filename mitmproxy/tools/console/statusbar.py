@@ -224,7 +224,7 @@ class StatusBar(urwid.WidgetWrap):
         return r
 
     def redraw(self):
-        fc = self.master.state.flow_count()
+        fc = len(self.master.state.flows)
         if self.master.state.focus is None:
             offset = 0
         else:

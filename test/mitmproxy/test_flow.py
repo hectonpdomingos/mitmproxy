@@ -204,16 +204,16 @@ class TestState:
         f = tutils.tflow()
         c.add_flow(f)
         assert f
-        assert c.flow_count() == 1
+        assert len(c.flows) == 1
         assert c.active_flow_count() == 1
 
         newf = tutils.tflow()
         assert c.add_flow(newf)
-        assert c.active_flow_count() == 2
+        assert len(c.flows) == 2
 
         f.response = http.HTTPResponse.wrap(mitmproxy.test.tutils.tresp())
         assert c.update_flow(f)
-        assert c.flow_count() == 2
+        assert len(c.flows) == 2
         assert c.active_flow_count() == 1
 
         assert not c.update_flow(None)
@@ -296,7 +296,7 @@ class TestState:
         f.intercepted = True
 
         c.clear()
-        assert c.flow_count() == 0
+        assert len(c.flows) == 0
 
     def test_dump_flows(self):
         c = state.State()
@@ -445,11 +445,11 @@ class TestFlowMaster:
         fm.clientconnect(f.client_conn)
         f.request = http.HTTPRequest.wrap(mitmproxy.test.tutils.treq())
         fm.request(f)
-        assert s.flow_count() == 1
+        assert len(s.flows) == 1
 
         f.response = http.HTTPResponse.wrap(mitmproxy.test.tutils.tresp())
         fm.response(f)
-        assert s.flow_count() == 1
+        assert len(s.flows) == 1
 
         fm.clientdisconnect(f.client_conn)
 

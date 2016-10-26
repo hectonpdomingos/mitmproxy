@@ -164,7 +164,7 @@ class FlowStore(FlowList):
                 c += 1
         return c
 
-    # TODO: Should accept_all operate on views or on all flows?
+    # TODO: accept_all should operate on views, not all flows
     def accept_all(self, master):
         for f in self._list:
             f.resume(master)
@@ -187,14 +187,8 @@ class State:
     def filter_txt(self):
         return getattr(self.view.filter, "pattern", None)
 
-    def flow_count(self):
-        return len(self.flows)
-
     # TODO: All functions regarding flows that don't cause side-effects should
     # be moved into FlowStore.
-    def index(self, f):
-        return self.flows.index(f)
-
     def active_flow_count(self):
         return self.flows.active_count()
 

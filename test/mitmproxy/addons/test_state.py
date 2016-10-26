@@ -12,9 +12,9 @@ class TestState:
         fm.addons.add(s)
         f = tutils.tflow(resp=True)
         fm.load_flow(f)
-        assert s.flow_count() == 1
+        assert len(s.flows) == 1
 
         f2 = s.duplicate_flow(f)
         assert f2.response
-        assert s.flow_count() == 2
-        assert s.index(f2) == 1
+        assert len(s.flows) == 2
+        assert s.flows.index(f2) == 1

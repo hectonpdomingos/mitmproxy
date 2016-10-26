@@ -438,7 +438,7 @@ class ConsoleMaster(master.Master):
 
         if self.options.rfile:
             ret = self.load_flows_path(self.options.rfile)
-            if ret and self.state.flow_count():
+            if ret and self.state.flows:
                 signals.add_log(
                     "File truncated or corrupted. "
                     "Loaded as many flows as possible.",
