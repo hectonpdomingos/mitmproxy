@@ -89,7 +89,6 @@ class FlowStore(FlowList):
 
     def __init__(self):
         super().__init__()
-        self._set = set()  # Used for O(1) lookups
         self.views = []
         self._recalculate_views()
 
@@ -98,16 +97,12 @@ class FlowStore(FlowList):
             if f.id == flow_id:
                 return f
 
-    def __contains__(self, f):
-        return f in self._set
-
     def _add(self, f):
         """
         Adds a flow to the state.
         The flow to add must not be present in the state.
         """
         self._list.append(f)
-        self._set.add(f)
         for view in self.views:
             view._add(f)
 
@@ -126,7 +121,6 @@ class FlowStore(FlowList):
         The flow must be present in the state.
         """
         self._list.remove(f)
-        self._set.remove(f)
         for view in self.views:
             view._remove(f)
 
@@ -138,12 +132,10 @@ class FlowStore(FlowList):
         The list of flows to add must not contain flows that are already in the state.
         """
         self._list.extend(flows)
-        self._set.update(flows)
         self._recalculate_views()
 
     def _clear(self):
         self._list = []
-        self._set = set()
         self._recalculate_views()
 
     def _recalculate_views(self):
